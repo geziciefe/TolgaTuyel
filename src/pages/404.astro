@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Sayfa Bulunamadı | Tolga Tüyel"
+  description="Aradığınız sayfa bulunamadı. Tolga Tüyel’in resmi web sitesine dönün."
+  noindex={true}
+>
+  <main class="not-found">
+    <p>404</p>
+    <h1>SAYFA BULUNAMADI</h1>
+    <a href="/">ANA SAYFAYA DÖN <span>→</span></a>
+  </main>
+
+  <style>
+    :global(*) { box-sizing:border-box; }
+    :global(body) { margin:0; background:#0d0d0d; color:#f0eee8; font-family:Manrope,Arial,sans-serif; }
+    .not-found { min-height:100svh; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; padding:clamp(24px,8vw,120px); background:linear-gradient(135deg,#0d0d0d 55%,#252200); }
+    p { margin:0 0 18px; color:#f4d800; font:500 12px/1 'DM Mono',monospace; letter-spacing:2px; }
+    h1 { max-width:900px; margin:0 0 38px; font-family:'Archivo Black',Arial,sans-serif; font-size:clamp(52px,10vw,150px); font-weight:400; line-height:.83; letter-spacing:-.07em; }
+    a { display:inline-flex; min-height:48px; align-items:center; gap:18px; padding:0 22px; background:#f4d800; color:#0d0d0d; font:500 11px/1 'DM Mono',monospace; letter-spacing:1px; text-decoration:none; }
+  </style>
+</BaseLayout>

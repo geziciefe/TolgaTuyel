@@ -1,0 +1,22 @@
+{
+  "name": "Tolga Tüyel | Resmi Web Sitesi",
+  "short_name": "Tolga Tüyel",
+  "description": "Rock müzisyeni Tolga Tüyel’in resmi web sitesi.",
+  "lang": "tr",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0d0d",
+  "theme_color": "#0d0d0d",
+  "icons": [
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

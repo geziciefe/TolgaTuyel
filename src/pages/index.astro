@@ -1,0 +1,250 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+  siYoutube,
+  siSpotify,
+  siApplemusic,
+  siDeezer,
+  siInstagram,
+  siTiktok
+} from 'simple-icons';
+
+const socials = [
+  { name: 'YouTube', url: 'https://www.youtube.com/channel/UCz-wOedKNRdpFHCN_Y97RpQ', icon: siYoutube },
+  { name: 'Spotify', url: 'https://open.spotify.com/artist/27G6LoQrP8XRtJcaQShu3a?si=m_I1cw2DT2qpg4XiPf26dQ&nd=1&dlsi=85134dc153fe4f50', icon: siSpotify },
+  { name: 'Apple Music', url: 'https://music.apple.com/us/artist/tolga-tüyel/1829393182', icon: siApplemusic },
+  { name: 'Deezer', url: 'https://www.deezer.com/tr/artist/338210611', icon: siDeezer },
+  { name: 'Instagram', url: 'https://www.instagram.com/tolga.tuyel/', icon: siInstagram },
+  { name: 'TikTok', url: 'https://www.tiktok.com/@tolga.tuyel', icon: siTiktok }
+];
+
+const videos = [
+  {
+    title: 'Labirent',
+    type: 'Resmi Video Klip',
+    year: '2026',
+    id: 'NhP-RROUSl8'
+  },
+  {
+    title: 'Susmam',
+    type: 'Resmi Video Klip',
+    year: '2026',
+    id: 'v8b2K9MUE1M'
+  },
+  {
+    title: 'Boş Balad',
+    type: 'Resmi Video Klip',
+    year: '2026',
+    id: '6jVCqlxbTA0'
+  },
+  {
+    title: 'Karanlıkla Baş Başa',
+    type: 'Lyrics Video',
+    year: '2026',
+    id: 'y0JOM3B0_Dg'
+  },
+  {
+    title: 'Namütenahi',
+    type: 'Resmi Video Klip',
+    year: '2025',
+    id: 'H6HGBZvG7do'
+  },
+  {
+    title: 'Geceye Fısıldayan Kalp',
+    type: 'Resmi Video Klip',
+    year: '2025',
+    id: 'SDw5H0Xk9jE'
+  },
+  {
+    title: 'Sen Gidince',
+    type: 'Resmi Video Klip',
+    year: '2025',
+    id: 'iqQQ17A5bBg'
+  }
+];
+
+const gallery = ['Sahne Işığı', 'Stüdyo', 'Canlı Performans', 'Yolculuk', 'Kayıt Günü'];
+---
+
+<BaseLayout>
+  <header class="site-header" id="top">
+    <a class="wordmark" href="#top" aria-label="Tolga Tüyel ana sayfa">TOLGA <span>TÜYEL</span></a>
+    <button class="menu-toggle" aria-label="Menüyü aç" aria-expanded="false">
+      <i></i><i></i>
+    </button>
+    <nav aria-label="Ana menü">
+      <a href="#muzik">Müzik</a>
+      <a href="#videolar">Klipler</a>
+      <a href="#galeri">Galeri</a>
+      <a href="#hakkinda">Hakkında</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-label="Tolga Tüyel">
+      <div class="hero-photo-placeholder" role="img" aria-label="Tolga Tüyel portresi"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-copy">
+        <h1><span>TOLGA</span> <em>TÜYEL</em></h1>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#muzik">DİNLE <span>↗</span></a>
+          <a class="btn btn-outline" href="#videolar">KLİPLER</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="ticker" aria-label="Güncel duyuru">
+      <div class="ticker-track">
+        <div class="ticker-group">
+          <span>YENİ YAYIN — LABİRENT — ŞİMDİ TÜM DİJİTAL PLATFORMLARDA</span><b>✦</b>
+          <span>YENİ YAYIN — LABİRENT — ŞİMDİ TÜM DİJİTAL PLATFORMLARDA</span><b>✦</b>
+          <span>YENİ YAYIN — LABİRENT — ŞİMDİ TÜM DİJİTAL PLATFORMLARDA</span><b>✦</b>
+        </div>
+        <div class="ticker-group" aria-hidden="true">
+          <span>YENİ YAYIN — LABİRENT — ŞİMDİ TÜM DİJİTAL PLATFORMLARDA</span><b>✦</b>
+          <span>YENİ YAYIN — LABİRENT — ŞİMDİ TÜM DİJİTAL PLATFORMLARDA</span><b>✦</b>
+          <span>YENİ YAYIN — LABİRENT — ŞİMDİ TÜM DİJİTAL PLATFORMLARDA</span><b>✦</b>
+        </div>
+      </div>
+    </section>
+
+    <section class="listen section" id="muzik">
+      <div class="section-heading">
+        <h2>SESİ TAKİP ET.</h2>
+      </div>
+      <p class="listen-intro">Yeni yayınları ve tüm diskografiyi dijital platformlardan dinle.</p>
+      <div class="platform-list">
+        {socials.map((social) => (
+          <a class="platform-link" href={social.url} target="_blank" rel="noreferrer">
+            <span class="platform-logo" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d={social.icon.path} fill={`#${social.icon.hex}`} />
+              </svg>
+            </span>
+            <span class="platform-name">{social.name}</span>
+            <span class="platform-action">DİNLE <b>↗</b></span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="videos section" id="videolar">
+      <div class="section-heading split-heading">
+        <div>
+          <h2>KLİPLER</h2>
+        </div>
+      </div>
+      <div class="video-list">
+        {videos.map((video, index) => (
+          <article class="video-card">
+            <div class="video-frame">
+              <iframe
+                src={`https://www.youtube-nocookie.com/embed/${video.id}`}
+                title={`${video.title} - Tolga Tüyel`}
+                loading={index === 0 ? 'eager' : 'lazy'}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <div class="video-meta">
+              <p>{video.type} <span>/</span> {video.year}</p>
+              <h3>{video.title}</h3>
+              <a href={`https://www.youtube.com/watch?v=${video.id}`} target="_blank" rel="noreferrer">YOUTUBE’DA İZLE <span>↗</span></a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="gallery section" id="galeri">
+      <div class="section-heading split-heading">
+        <div>
+          <h2>GALERİ</h2>
+        </div>
+        <div class="gallery-controls" aria-label="Galeri kontrolleri">
+          <button class="gallery-prev" aria-label="Önceki fotoğraflar">←</button>
+          <button class="gallery-next" aria-label="Sonraki fotoğraflar">→</button>
+        </div>
+      </div>
+      <div class="gallery-strip" tabindex="0">
+        {gallery.map((item, index) => (
+          <figure class={`gallery-item item-${index + 1}`}>
+            <div class="gallery-placeholder"><span>FOTOĞRAF<br />EKLENECEK</span></div>
+          </figure>
+        ))}
+      </div>
+      <p class="gallery-note">Fotoğraflar geldiğinde <code>public/images</code> klasörüne koyup boş alanlara ekleyebilirsin.</p>
+    </section>
+
+    <section class="about section" id="hakkinda">
+      <p class="eyebrow">HAKKINDA</p>
+      <div class="about-grid">
+        <h2>TOLGA<br /><span>TÜYEL</span></h2>
+        <div class="about-copy">
+          <p>Tolga Tüyel’in müzik serüveni 1991’de gitarla tanışmasıyla başladı. Rock müziğin güçlü ve duygusal etkisi onu derinden etkiledi. Guns N’ Roses, Metallica, Nirvana, Iron Maiden ve The Doors gibi gruplar, müzikal kimliğinin temel taşları oldu.</p>
+          <p>Kumsallarda başlayan bu yolculuk, Kadıköy ve Taksim’in canlı sahnelerine uzandı. Cover gruplarıyla sahne deneyimi kazanırken, kendi bestelerini üretmeyi hiç bırakmadı. Ancak Türkiye’de rock müziğin karşılaştığı zorluklar ve ekonomik koşullar, onu bir süreliğine müzikten uzaklaştırdı ve kurumsal hayata yöneltti.</p>
+          <p>Bugün ise 30 yıllık birikimiyle müziğe dönüş yapan Tolga Tüyel, şarkılarını geniş kitlelere ulaştırmayı hedefliyor. Eserleri çok katmanlı yapısıyla, dinleyiciye kendi iç yolculuğuna göre anlam sunuyor.</p>
+          <p>Solo kariyerini başlatan Tüyel’in ilk teklisi “Sen Gidince”, yıllar önce yazılmış ve zamanla yeniden şekillenmiş bir parça. Prodüktör Kutay Yavuz’la birlikte modern bir rock sound’una kavuşan şarkının en zor kısmı, yıllarca içe sinmeyen gitar solosuydu. Kayıt gününün son saatlerinde, yoğun bir çalışmayla tamamlandı.</p>
+          <p>İkinci teklisi “Geceye Fısıldayan Kalp” ve yayınlanmak üzere olan üçüncü teklisi “Namütenahi”de ise prodüktör koltuğunda İlkay Özboyar yer aldı.</p>
+          <p>Kurumsal alanda genel müdürlük yapan Tolga Tüyel için müzik, hiçbir zaman sadece bir hobi olmadı. “Sen Gidince” ile başlayan bu yeni dönem, onun iç dünyasını müziğe dönüştürdüğü samimi ve kararlı bir çıkışı temsil ediyor.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-bottom">
+      <p>© {new Date().getFullYear()}</p>
+      <div>{socials.map((social) => <a href={social.url} target="_blank" rel="noreferrer">{social.name}</a>)}</div>
+      <p class="mifer-credit">DESIGN BY <a href="https://miferdigital.com" target="_blank" rel="noreferrer">MIFER</a></p>
+    </div>
+  </footer>
+
+  <script>
+    const menuButton = document.querySelector('.menu-toggle');
+    const header = document.querySelector('.site-header');
+    menuButton?.addEventListener('click', () => {
+      const open = header?.classList.toggle('menu-open');
+      menuButton.setAttribute('aria-expanded', String(open));
+    });
+    document.querySelectorAll('nav a').forEach((link) => link.addEventListener('click', () => {
+      header?.classList.remove('menu-open');
+      menuButton?.setAttribute('aria-expanded', 'false');
+    }));
+
+    const strip = document.querySelector('.gallery-strip');
+    document.querySelector('.gallery-next')?.addEventListener('click', () => strip?.scrollBy({ left: 420, behavior: 'smooth' }));
+    document.querySelector('.gallery-prev')?.addEventListener('click', () => strip?.scrollBy({ left: -420, behavior: 'smooth' }));
+  </script>
+
+  <style is:global>
+    @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+    :root { --yellow:#f4d800; --ink:#0d0d0d; --paper:#f0eee8; --grey:#282828; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; background:var(--ink); }
+    body { margin:0; background:var(--ink); color:var(--paper); font-family:Manrope, Arial, sans-serif; overflow-x:hidden; }
+    a { color:inherit; text-decoration:none; }
+    .site-header { height:82px; padding:0 clamp(22px,4vw,64px); display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:20; background:rgba(13,13,13,.93); border-bottom:1px solid rgba(255,255,255,.12); backdrop-filter:blur(14px); }
+    .wordmark { font-family:'Archivo Black',Arial,sans-serif; letter-spacing:-1.5px; font-size:20px; line-height:.85; white-space:nowrap; }
+    .wordmark span { color:var(--yellow); }
+    nav { display:flex; gap:clamp(18px,2.4vw,42px); font:500 11px/1 'DM Mono',monospace; letter-spacing:1.1px; }
+    nav a { transition:color .2s; } nav a:hover { color:var(--yellow); }
+    .menu-toggle { display:none; background:transparent; border:0; padding:8px; cursor:pointer; } .menu-toggle i { background:var(--paper); display:block; height:1px; width:24px; margin:5px; }
+    .hero { min-height:calc(100svh - 82px); position:relative; display:flex; align-items:flex-end; padding:clamp(32px,7vw,110px) clamp(22px,7vw,115px); overflow:hidden; }
+    .hero-photo-placeholder { position:absolute; inset:0; background:#171717 url('/images/tolga-tuyel-hero.jpg') center 26%/cover no-repeat; }
+    .hero-overlay { position:absolute; inset:0; background:linear-gradient(90deg,rgba(0,0,0,.56) 0%,rgba(0,0,0,.25) 40%,rgba(0,0,0,.02) 76%),linear-gradient(0deg,rgba(0,0,0,.58),transparent 58%); }
+    .hero-copy { position:absolute; z-index:1; top:clamp(62px,10vh,118px); right:clamp(70px,8vw,150px); text-align:right; }
+    .eyebrow { color:var(--yellow); font:500 11px/1 'DM Mono',monospace; letter-spacing:1.5px; margin:0 0 18px; }
+    h1,h2,h3,p { margin-top:0; } h1,h2 { font-family:'Archivo Black',Arial,sans-serif; font-weight:400; letter-spacing:-.07em; }
+    h1 { font-size:clamp(68px,8.1vw,124px); line-height:.9; margin-bottom:24px; white-space:nowrap; } h1 em { color:var(--yellow); font-style:normal; }
+    .hero-text { font-size:clamp(15px,1.5vw,20px); max-width:420px; line-height:1.55; color:#e1ded5; margin-bottom:32px; }
+    .hero-actions { display:flex; justify-content:flex-end; gap:12px; flex-wrap:wrap; }.btn { min-height:48px; display:inline-flex; padding:0 21px; align-items:center; justify-content:center; gap:16px; font:500 11px/1 'DM Mono',monospace; letter-spacing:1.1px; transition:transform .2s,background .2s; }.btn:hover { transform:translateY(-3px); }.btn-primary { background:var(--yellow); color:var(--ink); }.btn-outline { border:1px solid rgba(255,255,255,.6); }
+    .ticker { height:56px; display:flex; align-items:center; overflow:hidden; background:var(--yellow); color:var(--ink); }.ticker-track { display:flex; width:max-content; white-space:nowrap; font:700 13px/1 'DM Mono',monospace; letter-spacing:1.2px; animation:move 30s linear infinite; will-change:transform; }.ticker-group { display:flex; align-items:center; gap:28px; padding-right:28px; }.ticker-track b { font-size:18px; flex:none; } @keyframes move {to {transform:translateX(-50%);}}
+    .section { padding:clamp(78px,11vw,160px) clamp(22px,7vw,115px); }.section-heading h2 { font-size:clamp(48px,8vw,115px); line-height:.84; margin:0; }.listen { background:var(--paper); color:var(--ink); }.listen-intro { margin:32px 0 42px; max-width:430px; font-size:17px; line-height:1.55; }.platform-list { border-top:1px solid #aaa69d; }.platform-link { display:grid; grid-template-columns:55px 1fr auto; align-items:center; min-height:82px; gap:18px; padding:0 8px; border-bottom:1px solid #aaa69d; transition:background .2s,padding .2s; }.platform-link:hover { background:var(--yellow); padding-left:17px; }.platform-logo { display:block; width:38px; height:38px; }.platform-logo svg { display:block; width:100%; height:100%; }.platform-action { font:500 10px/1 'DM Mono',monospace; letter-spacing:1.2px; }.platform-name { font-family:'Archivo Black',Arial,sans-serif; font-size:clamp(22px,3vw,38px); letter-spacing:-.06em; }.platform-action b { padding-left:8px; font-size:17px; font-weight:400; }
+    .videos { background:#171717; }.split-heading { display:flex; justify-content:space-between; gap:42px; align-items:end; }.split-heading > p { max-width:270px; line-height:1.6; color:#bbb8ad; margin:0 0 5px; }.video-list { margin-top:82px; }.video-card { display:grid; grid-template-columns:minmax(300px,1.35fr) minmax(230px,.65fr); gap:clamp(24px,4vw,74px); padding:35px 0; border-top:1px solid rgba(255,255,255,.22); }.video-card:last-child { border-bottom:1px solid rgba(255,255,255,.22); }.video-frame { aspect-ratio:16/9; background:#0b0b0b; }.video-frame iframe { width:100%; height:100%; border:0; }.video-meta { padding-top:6px; align-self:center; }.video-meta > p:first-child { color:var(--yellow); font:500 10px/1 'DM Mono',monospace; letter-spacing:1.2px; }.video-meta > p span { color:#777; padding:0 7px; }.video-meta h3 { font-family:'Archivo Black',Arial,sans-serif; font-size:clamp(27px,3.4vw,48px); font-weight:400; letter-spacing:-.05em; line-height:.95; margin:13px 0 18px; }.video-description { color:#aaa79f; font-size:14px; line-height:1.65; max-width:340px; }.video-meta a,.text-link { font:500 10px/1 'DM Mono',monospace; letter-spacing:1.2px; display:inline-block; margin-top:16px; }.video-meta a span,.text-link span { color:var(--yellow); font-size:16px; padding-left:8px; }
+    .gallery { background:var(--yellow); color:var(--ink); padding-right:0; }.gallery .eyebrow { color:#433d00; }.gallery-controls { display:flex; gap:10px; padding-right:clamp(22px,7vw,115px); }.gallery-controls button { height:47px; width:47px; cursor:pointer; border:1px solid #332e00; background:transparent; color:var(--ink); font-size:21px; transition:background .2s; }.gallery-controls button:hover { background:var(--ink); color:var(--yellow); }.gallery-strip { display:flex; gap:18px; overflow-x:auto; padding:69px 0 15px; scrollbar-width:none; scroll-snap-type:x mandatory; }.gallery-strip::-webkit-scrollbar { display:none; }.gallery-item { flex:0 0 min(42vw,520px); margin:0; scroll-snap-align:start; }.gallery-placeholder { aspect-ratio:4/5; background:#282613; position:relative; overflow:hidden; }.gallery-item:nth-child(2) .gallery-placeholder { background:#777021; }.gallery-item:nth-child(3) .gallery-placeholder { background:#37340e; }.gallery-item:nth-child(4) .gallery-placeholder { background:#1c1b12; }.gallery-item:nth-child(5) .gallery-placeholder { background:#5d581a; }.gallery-placeholder::after { content:''; position:absolute; inset:8%; border:1px solid rgba(244,216,0,.26); }.gallery-placeholder span { position:absolute; inset:auto 22px 20px auto; z-index:1; font:500 10px/1.4 'DM Mono'; letter-spacing:1.2px; text-align:right; color:var(--yellow); }.gallery-item:nth-child(even) .gallery-placeholder span { color:var(--ink); }.gallery-item figcaption { padding-top:13px; font:500 10px/1 'DM Mono'; letter-spacing:1.1px; }.gallery-note { color:#4a4307; font-size:12px; padding-right:28px; }.gallery-note code { color:#1e1c05; }
+    .about { background:var(--ink); }.about-grid { display:grid; grid-template-columns:.7fr 1.3fr; gap:clamp(32px,8vw,170px); align-items:start; }.about h2 { position:sticky; top:120px; font-size:clamp(44px,7.5vw,105px); line-height:.84; margin:0; }.about h2 span { color:var(--yellow); }.about-copy { max-width:680px; }.about-copy p { color:#c8c5bc; font-size:clamp(15px,1.25vw,18px); line-height:1.78; margin:0 0 30px; }.about-copy p:first-child { color:var(--paper); font-size:clamp(18px,1.6vw,23px); line-height:1.6; }
+    footer { padding:44px clamp(22px,7vw,115px) 25px; border-top:1px solid rgba(255,255,255,.2); }.footer-top,.footer-bottom { display:flex; justify-content:space-between; gap:25px; align-items:center; }.footer-top { padding-bottom:52px; }.footer-right { text-align:right; }.footer-right p { color:#87847d; font:500 9px/1 'DM Mono'; letter-spacing:1px; margin:0; }.footer-bottom { border-top:1px solid rgba(255,255,255,.12); padding-top:22px; color:#87847d; font:500 9px/1 'DM Mono'; letter-spacing:1px; }.footer-bottom p { margin:0; }.footer-bottom div { display:flex; gap:18px; }.footer-bottom a:hover { color:var(--yellow); }.mifer-credit { text-align:right; }.mifer-credit a { color:var(--yellow); }
+    @media (max-width:760px) { .site-header { height:68px; }.menu-toggle { display:block; } nav { display:none; position:absolute; left:0; right:0; top:68px; padding:25px 22px; background:#121212; flex-direction:column; border-bottom:1px solid rgba(255,255,255,.2); }.menu-open nav { display:flex; }.hero { min-height:calc(100svh - 68px); padding:35px 22px 70px; }.hero-photo-placeholder { background-position:8% center; }.hero-overlay { background:linear-gradient(0deg,rgba(0,0,0,.9) 0%,rgba(0,0,0,.18) 62%,rgba(0,0,0,.08)); }.hero-copy { top:auto; right:22px; bottom:64px; left:22px; text-align:left; }.hero-copy h1 { font-size:clamp(54px,17vw,74px); line-height:.8; white-space:normal; margin-bottom:24px; }.hero-copy h1 span,.hero-copy h1 em { display:block; }.hero-actions { justify-content:flex-start; }.platform-link { grid-template-columns:42px 1fr auto; gap:7px; min-height:66px; }.platform-logo { width:31px; height:31px; }.platform-name { font-size:22px; }.platform-action { font-size:8px; }.split-heading { align-items:start; flex-direction:column; }.video-list { margin-top:45px; }.video-card { grid-template-columns:1fr; gap:20px; padding:25px 0; }.gallery-item { flex-basis:73vw; }.about-grid { grid-template-columns:1fr; }.about h2 { position:static; }.footer-top,.footer-bottom { align-items:flex-start; flex-direction:column; }.footer-right { text-align:left; }.footer-bottom div { flex-wrap:wrap; gap:11px 15px; }.mifer-credit { text-align:left; } }
+  </style>
+</BaseLayout>

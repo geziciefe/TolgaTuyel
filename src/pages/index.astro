@@ -64,6 +64,7 @@ const videos = [
 ];
 
 const acousticPerformances = [
+  { title: 'With or Without You (Acoustic Live)', id: '7YNVZH9tKBY', duration: 'PT3M29S', orientation: 'landscape' },
   { title: "Patience (Guns N' Roses Cover)", id: 'e50pruJ6LC4', duration: 'PT4M31S', orientation: 'landscape' },
   { title: 'Big In Japan (Alphaville Cover)', id: 'xOZuQZStNn4', duration: 'PT3M15S', orientation: 'landscape' },
   { title: 'Boş Balad (Akustik Versiyon)', id: 'LI81Vzg1C-g', duration: 'PT3M21S', orientation: 'landscape' },
@@ -143,7 +144,7 @@ const structuredData = {
       '@type': 'MusicEvent',
       '@id': `${new URL('/', siteURL).href}#kadikoy-sahne-2026`,
       name: 'Tolga Tüyel Konseri — Kadıköy Sahne',
-      description: 'Tolga Tüyel, kendi besteleri ve güçlü sahne performansıyla Kadıköy Sahne’de. Gecenin DJ performansında Aptulika sahnede.',
+      description: 'Tolga Tüyel Kadıköy Sahne’de! Alternatif rock dünyasının üretken isimlerinden Tolga Tüyel, kendi besteleri ve güçlü sahne performansıyla 28 Ekim’de Kadıköy Sahne’de dinleyicileriyle buluşuyor. Gecenin DJ performansında ise Aptulika sahnede olacak.',
       startDate: '2026-10-28T21:30:00+03:00',
       doorTime: '2026-10-28T20:00:00+03:00',
       eventStatus: 'https://schema.org/EventScheduled',
@@ -162,7 +163,7 @@ const structuredData = {
       '@type': 'VideoObject',
       '@id': `${new URL('/', siteURL).href}#acoustic-${video.id}`,
       name: video.title,
-      description: `${video.title}, Tolga Tüyel akustik performansı.`,
+      description: `${video.title}, Tolga Tüyel canlı performansı.`,
       thumbnailUrl: `https://i.ytimg.com/vi/${video.id}/maxresdefault.jpg`,
       embedUrl: `https://www.youtube-nocookie.com/embed/${video.id}`,
       contentUrl: `https://www.youtube.com/watch?v=${video.id}`,
@@ -185,7 +186,7 @@ const structuredData = {
       <a href="#konser">Konser</a>
       <a href="#muzik">Müzik</a>
       <a href="#videolar">Klipler</a>
-      <a href="#akustik">Akustik</a>
+      <a href="#akustik">Canlı Performans</a>
       <a href="#galeri">Galeri</a>
       <a href="#hakkinda">Hakkında</a>
     </nav>
@@ -252,7 +253,11 @@ const structuredData = {
             <span>EKİM<br /><em>2026 · ÇARŞAMBA</em></span>
           </div>
           <h2 id="concert-title">KADIKÖY<br /><span>SAHNE</span></h2>
-          <p class="concert-lead">Tolga Tüyel, kendi besteleri ve güçlü sahne performansıyla Kadıköy Sahne’de. Gecenin DJ performansında Aptulika sahnede.</p>
+          <div class="concert-lead">
+            <p><strong>Tolga Tüyel Kadıköy Sahne’de!</strong></p>
+            <p>Alternatif rock dünyasının üretken isimlerinden Tolga Tüyel, kendi besteleri ve güçlü sahne performansıyla 28 Ekim’de Kadıköy Sahne’de dinleyicileriyle buluşuyor.</p>
+            <p>Gecenin DJ performansında ise Aptulika sahnede olacak.</p>
+          </div>
           <dl class="concert-times">
             <div><dt>KAPI</dt><dd>20:00</dd></div>
             <div><dt>APTULİKA DJ</dt><dd>21:00</dd></div>
@@ -268,7 +273,7 @@ const structuredData = {
 
     <section class="listen section" id="muzik">
       <div class="section-heading">
-        <h2>SESİ TAKİP ET.</h2>
+        <h2>TAKİP ET!</h2>
       </div>
       <p class="listen-intro">Yeni yayınları ve tüm diskografiyi dijital platformlardan dinle.</p>
       <div class="platform-list">
@@ -318,15 +323,15 @@ const structuredData = {
     <section class="acoustic section" id="akustik">
       <div class="section-heading acoustic-heading">
         <div>
-          <h2>AKUSTİK</h2>
-          <p>Canlı ve akustik performanslar. Bir videoya dokun, dinlemeye başla.</p>
+          <h2>CANLI PERFORMANS</h2>
+          <p>Canlı performanslar ve özel yorumlar. Bir videoya dokun, dinlemeye başla.</p>
         </div>
-        <div class="acoustic-controls" aria-label="Akustik performans kontrolleri">
-          <button class="acoustic-prev" type="button" aria-label="Önceki akustik performans">←</button>
-          <button class="acoustic-next" type="button" aria-label="Sonraki akustik performans">→</button>
+        <div class="acoustic-controls" aria-label="Canlı performans kontrolleri">
+          <button class="acoustic-prev" type="button" aria-label="Önceki canlı performans">←</button>
+          <button class="acoustic-next" type="button" aria-label="Sonraki canlı performans">→</button>
         </div>
       </div>
-      <div class="acoustic-marquee" aria-label="Tolga Tüyel akustik performansları" tabindex="0">
+      <div class="acoustic-marquee" aria-label="Tolga Tüyel canlı performansları" tabindex="0">
         <div class="acoustic-track">
           <div class="acoustic-group">
             {acousticPerformances.map((video) => (
@@ -335,7 +340,7 @@ const structuredData = {
                 type="button"
                 data-acoustic-video={video.id}
                 data-acoustic-title={video.title}
-                aria-label={`${video.title} akustik performansını oynat`}
+                aria-label={`${video.title} canlı performansını oynat`}
               >
                 <img
                   src={`https://i.ytimg.com/vi/${video.id}/maxresdefault.jpg`}
@@ -413,12 +418,12 @@ const structuredData = {
   <dialog class="acoustic-dialog" aria-labelledby="acoustic-dialog-title">
     <div class="acoustic-dialog-shell">
       <button class="acoustic-close" type="button" aria-label="Videoyu kapat">KAPAT <span aria-hidden="true">×</span></button>
-      <p class="eyebrow">AKUSTİK PERFORMANS</p>
+      <p class="eyebrow">CANLI PERFORMANS</p>
       <h3 id="acoustic-dialog-title"></h3>
       <div class="acoustic-player">
         <iframe
           src="about:blank"
-          title="Tolga Tüyel akustik performansı"
+          title="Tolga Tüyel canlı performansı"
           referrerpolicy="strict-origin-when-cross-origin"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen
@@ -540,7 +545,7 @@ const structuredData = {
     document.querySelectorAll('[data-acoustic-video]').forEach((card) => {
       card.addEventListener('click', () => {
         const id = card.getAttribute('data-acoustic-video');
-        const title = card.getAttribute('data-acoustic-title') ?? 'Akustik performans';
+        const title = card.getAttribute('data-acoustic-title') ?? 'Canlı performans';
         if (!id || !(acousticDialog instanceof HTMLDialogElement) || !(acousticFrame instanceof HTMLIFrameElement)) return;
         if (acousticTitle) acousticTitle.textContent = title;
         acousticFrame.title = `${title} - Tolga Tüyel`;
@@ -599,6 +604,8 @@ const structuredData = {
     .concert h2 { margin:clamp(34px,5vw,70px) 0 28px; font-size:clamp(48px,7vw,105px); line-height:.82; }
     .concert h2 span { color:var(--yellow); }
     .concert-lead { max-width:620px; color:#c9c6bd; font-size:clamp(16px,1.4vw,20px); line-height:1.65; }
+    .concert-lead p:last-child { margin-bottom:0; }
+    .concert-lead strong { color:var(--paper); font-family:'Archivo Black',Arial,sans-serif; font-size:clamp(20px,2vw,30px); font-weight:400; line-height:1.1; letter-spacing:-.04em; }
     .concert-times { display:grid; grid-template-columns:repeat(3,1fr); margin:38px 0 0; border-top:1px solid rgba(255,255,255,.2); border-bottom:1px solid rgba(255,255,255,.2); }
     .concert-times div { padding:20px 18px 20px 0; }
     .concert-times div + div { padding-left:18px; border-left:1px solid rgba(255,255,255,.2); }

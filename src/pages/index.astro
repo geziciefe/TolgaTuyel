@@ -63,6 +63,17 @@ const videos = [
   }
 ];
 
+const acousticPerformances = [
+  { title: "Patience (Guns N' Roses Cover)", id: 'e50pruJ6LC4', duration: 'PT4M31S', orientation: 'landscape' },
+  { title: 'Big In Japan (Alphaville Cover)', id: 'xOZuQZStNn4', duration: 'PT3M15S', orientation: 'landscape' },
+  { title: 'Boş Balad (Akustik Versiyon)', id: 'LI81Vzg1C-g', duration: 'PT3M21S', orientation: 'landscape' },
+  { title: 'Sözlerimi Geri Alamam', id: 'zvvW2qbF59s', duration: 'PT3M43S', orientation: 'portrait' },
+  { title: 'Fırt Emin (Yaşar Kurt)', id: 'A7X6yYeylxs', duration: 'PT2M35S', orientation: 'portrait' },
+  { title: 'Aynalı Kemer (Barış Manço)', id: 'TKwM4Lw8-gQ', duration: 'PT3M2S', orientation: 'portrait' },
+  { title: 'Ruhum (Yaşar Kurt Cover)', id: 'qBE6Sl-sBV8', duration: 'PT2M35S', orientation: 'portrait' },
+  { title: 'Tamirci Çırağı (Cem Karaca Cover)', id: 'IElHNiD0Ic8', duration: 'PT5M48S', orientation: 'portrait' }
+];
+
 const gallery = [
   {
     src: '/images/gallery/tolga-tuyel-warm-portrait.jpg',
@@ -115,7 +126,8 @@ const structuredData = {
       ],
       jobTitle: 'Rock Müzisyeni',
       description: 'Türk rock müzisyeni, söz yazarı ve besteci Tolga Tüyel.',
-      sameAs: socials.map((social) => social.url)
+      sameAs: socials.map((social) => social.url),
+      subjectOf: acousticPerformances.map((video) => ({ '@id': `${new URL('/', siteURL).href}#acoustic-${video.id}` }))
     },
     {
       '@type': 'WebSite',
@@ -124,7 +136,19 @@ const structuredData = {
       name: 'Tolga Tüyel | Resmi Web Sitesi',
       inLanguage: 'tr-TR',
       publisher: { '@id': artistURL }
-    }
+    },
+    ...acousticPerformances.map((video) => ({
+      '@type': 'VideoObject',
+      '@id': `${new URL('/', siteURL).href}#acoustic-${video.id}`,
+      name: video.title,
+      description: `${video.title}, Tolga Tüyel akustik performansı.`,
+      thumbnailUrl: `https://i.ytimg.com/vi/${video.id}/maxresdefault.jpg`,
+      embedUrl: `https://www.youtube-nocookie.com/embed/${video.id}`,
+      contentUrl: `https://www.youtube.com/watch?v=${video.id}`,
+      duration: video.duration,
+      inLanguage: 'tr-TR',
+      creator: { '@id': artistURL }
+    }))
   ]
 };
 ---
@@ -139,6 +163,7 @@ const structuredData = {
     <nav id="main-nav" aria-label="Ana menü">
       <a href="#muzik">Müzik</a>
       <a href="#videolar">Klipler</a>
+      <a href="#akustik">Akustik</a>
       <a href="#galeri">Galeri</a>
       <a href="#hakkinda">Hakkında</a>
     </nav>
@@ -229,6 +254,48 @@ const structuredData = {
       </div>
     </section>
 
+    <section class="acoustic section" id="akustik">
+      <div class="section-heading acoustic-heading">
+        <div>
+          <h2>AKUSTİK</h2>
+          <p>Canlı ve akustik performanslar. Bir videoya dokun, dinlemeye başla.</p>
+        </div>
+        <div class="acoustic-controls" aria-label="Akustik performans kontrolleri">
+          <button class="acoustic-prev" type="button" aria-label="Önceki akustik performans">←</button>
+          <button class="acoustic-next" type="button" aria-label="Sonraki akustik performans">→</button>
+        </div>
+      </div>
+      <div class="acoustic-marquee" aria-label="Tolga Tüyel akustik performansları" tabindex="0">
+        <div class="acoustic-track">
+          <div class="acoustic-group">
+            {acousticPerformances.map((video) => (
+              <button
+                class={`acoustic-card ${video.orientation}`}
+                type="button"
+                data-acoustic-video={video.id}
+                data-acoustic-title={video.title}
+                aria-label={`${video.title} akustik performansını oynat`}
+              >
+                <img
+                  src={`https://i.ytimg.com/vi/${video.id}/maxresdefault.jpg`}
+                  alt=""
+                  width="1280"
+                  height="720"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span class="acoustic-shade" aria-hidden="true"></span>
+                <span class="acoustic-play" aria-hidden="true"><i></i></span>
+                <span class="acoustic-card-copy">
+                  <strong>{video.title}</strong>
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="gallery section" id="galeri">
       <div class="section-heading split-heading">
         <div>
@@ -282,7 +349,43 @@ const structuredData = {
     </div>
   </footer>
 
+  <dialog class="acoustic-dialog" aria-labelledby="acoustic-dialog-title">
+    <div class="acoustic-dialog-shell">
+      <button class="acoustic-close" type="button" aria-label="Videoyu kapat">KAPAT <span aria-hidden="true">×</span></button>
+      <p class="eyebrow">AKUSTİK PERFORMANS</p>
+      <h3 id="acoustic-dialog-title"></h3>
+      <div class="acoustic-player">
+        <iframe
+          src="about:blank"
+          title="Tolga Tüyel akustik performansı"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </dialog>
+
   <script>
+    const root = document.documentElement;
+    let lastViewportWidth = window.innerWidth;
+    const lockMobileViewportHeight = () => {
+      if (!window.matchMedia('(max-width: 760px)').matches) {
+        root.style.removeProperty('--mobile-viewport-height');
+        return;
+      }
+      const viewportHeight = Math.round(window.visualViewport?.height ?? window.innerHeight);
+      root.style.setProperty('--mobile-viewport-height', `${viewportHeight}px`);
+    };
+    lockMobileViewportHeight();
+    window.addEventListener('resize', () => {
+      const nextWidth = window.innerWidth;
+      if (Math.abs(nextWidth - lastViewportWidth) < 40) return;
+      lastViewportWidth = nextWidth;
+      window.requestAnimationFrame(lockMobileViewportHeight);
+    }, { passive: true });
+    window.addEventListener('orientationchange', () => window.requestAnimationFrame(lockMobileViewportHeight), { passive: true });
+
     const menuButton = document.querySelector('.menu-toggle');
     const header = document.querySelector('.site-header');
     menuButton?.addEventListener('click', () => {
@@ -305,15 +408,76 @@ const structuredData = {
     });
 
     const strip = document.querySelector('.gallery-strip');
-    const galleryStep = () => Math.min(520, window.innerWidth * 0.78);
-    document.querySelector('.gallery-next')?.addEventListener('click', () => strip?.scrollBy({ left: galleryStep(), behavior: 'smooth' }));
-    document.querySelector('.gallery-prev')?.addEventListener('click', () => strip?.scrollBy({ left: -galleryStep(), behavior: 'smooth' }));
+    const galleryItems = strip ? Array.from(strip.querySelectorAll('.gallery-item')) : [];
+    const galleryItemLeft = (item) => {
+      if (!(strip instanceof HTMLElement) || !(item instanceof HTMLElement)) return 0;
+      return item.getBoundingClientRect().left - strip.getBoundingClientRect().left + strip.scrollLeft;
+    };
+    const moveGallery = (direction) => {
+      if (!(strip instanceof HTMLElement) || galleryItems.length === 0) return;
+      const currentLeft = strip.scrollLeft;
+      const positions = galleryItems.map(galleryItemLeft);
+      const target = direction > 0
+        ? positions.find((position) => position > currentLeft + 8) ?? positions[positions.length - 1]
+        : [...positions].reverse().find((position) => position < currentLeft - 8) ?? positions[0];
+      strip.scrollTo({
+        left: target ?? 0,
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+      });
+    };
+    document.querySelector('.gallery-next')?.addEventListener('click', () => moveGallery(1));
+    document.querySelector('.gallery-prev')?.addEventListener('click', () => moveGallery(-1));
+
+    const acousticStrip = document.querySelector('.acoustic-marquee');
+    const acousticCards = acousticStrip ? Array.from(acousticStrip.querySelectorAll('.acoustic-card')) : [];
+    const acousticCardLeft = (card) => {
+      if (!(acousticStrip instanceof HTMLElement) || !(card instanceof HTMLElement)) return 0;
+      return card.getBoundingClientRect().left - acousticStrip.getBoundingClientRect().left + acousticStrip.scrollLeft;
+    };
+    const moveAcoustic = (direction) => {
+      if (!(acousticStrip instanceof HTMLElement) || acousticCards.length === 0) return;
+      const currentLeft = acousticStrip.scrollLeft;
+      const rawPositions = acousticCards.map(acousticCardLeft);
+      const leadingInset = rawPositions[0] ?? 0;
+      const positions = rawPositions.map((position) => Math.max(0, position - leadingInset));
+      const target = direction > 0
+        ? positions.find((position) => position > currentLeft + 8) ?? positions[positions.length - 1]
+        : [...positions].reverse().find((position) => position < currentLeft - 8) ?? positions[0];
+      acousticStrip.scrollTo({
+        left: target ?? 0,
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+      });
+    };
+    document.querySelector('.acoustic-next')?.addEventListener('click', () => moveAcoustic(1));
+    document.querySelector('.acoustic-prev')?.addEventListener('click', () => moveAcoustic(-1));
+
+    const acousticDialog = document.querySelector('.acoustic-dialog');
+    const acousticFrame = acousticDialog?.querySelector('iframe');
+    const acousticTitle = acousticDialog?.querySelector('#acoustic-dialog-title');
+    document.querySelectorAll('[data-acoustic-video]').forEach((card) => {
+      card.addEventListener('click', () => {
+        const id = card.getAttribute('data-acoustic-video');
+        const title = card.getAttribute('data-acoustic-title') ?? 'Akustik performans';
+        if (!id || !(acousticDialog instanceof HTMLDialogElement) || !(acousticFrame instanceof HTMLIFrameElement)) return;
+        if (acousticTitle) acousticTitle.textContent = title;
+        acousticFrame.title = `${title} - Tolga Tüyel`;
+        acousticFrame.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+        acousticDialog.showModal();
+      });
+    });
+    acousticDialog?.querySelector('.acoustic-close')?.addEventListener('click', () => acousticDialog.close());
+    acousticDialog?.addEventListener('click', (event) => {
+      if (event.target === acousticDialog) acousticDialog.close();
+    });
+    acousticDialog?.addEventListener('close', () => {
+      if (acousticFrame instanceof HTMLIFrameElement) acousticFrame.src = 'about:blank';
+    });
   </script>
 
   <style is:global>
     :root { --yellow:#f4d800; --ink:#0d0d0d; --paper:#f0eee8; --grey:#282828; }
     * { box-sizing:border-box; }
-    html { scroll-behavior:smooth; scroll-padding-top:82px; background:var(--ink); -webkit-text-size-adjust:100%; }
+    html { scroll-behavior:smooth; scroll-padding-top:82px; background:var(--ink); -webkit-text-size-adjust:100%; text-size-adjust:100%; }
     body { min-width:320px; margin:0; background:var(--ink); color:var(--paper); font-family:Manrope, Arial, sans-serif; overflow-x:hidden; }
     button { font:inherit; }
     a { color:inherit; text-decoration:none; }
@@ -338,12 +502,19 @@ const structuredData = {
     .ticker { height:56px; display:flex; align-items:center; overflow:hidden; background:var(--yellow); color:var(--ink); }.ticker-track { display:flex; width:max-content; white-space:nowrap; font:700 13px/1 'DM Mono',monospace; letter-spacing:1.2px; animation:move 30s linear infinite; will-change:transform; }.ticker-group { display:flex; align-items:center; gap:28px; padding-right:28px; }.ticker-track b { font-size:18px; flex:none; } @keyframes move {to {transform:translateX(-50%);}}
     .section { padding:clamp(78px,11vw,160px) clamp(22px,7vw,115px); }.section-heading h2 { font-size:clamp(48px,8vw,115px); line-height:.84; margin:0; }.listen { background:var(--paper); color:var(--ink); }.listen-intro { margin:32px 0 42px; max-width:430px; font-size:17px; line-height:1.55; }.platform-list { border-top:1px solid #aaa69d; }.platform-link { display:grid; grid-template-columns:55px 1fr auto; align-items:center; min-height:82px; gap:18px; padding:0 8px; border-bottom:1px solid #aaa69d; transition:background .2s,padding .2s; }.platform-link:hover { background:var(--yellow); padding-left:17px; }.platform-logo { display:block; width:38px; height:38px; }.platform-logo svg { display:block; width:100%; height:100%; }.platform-action { font:500 10px/1 'DM Mono',monospace; letter-spacing:1.2px; }.platform-name { font-family:'Archivo Black',Arial,sans-serif; font-size:clamp(22px,3vw,38px); letter-spacing:-.06em; }.platform-action b { padding-left:8px; font-size:17px; font-weight:400; }
     .videos { background:#171717; }.split-heading { display:flex; justify-content:space-between; gap:42px; align-items:end; }.split-heading > p { max-width:270px; line-height:1.6; color:#bbb8ad; margin:0 0 5px; }.video-list { margin-top:82px; }.video-card { display:grid; grid-template-columns:minmax(300px,1.35fr) minmax(230px,.65fr); gap:clamp(24px,4vw,74px); padding:35px 0; border-top:1px solid rgba(255,255,255,.22); }.video-card:last-child { border-bottom:1px solid rgba(255,255,255,.22); }.video-frame { aspect-ratio:16/9; background:#0b0b0b; }.video-frame iframe { width:100%; height:100%; border:0; }.video-meta { padding-top:6px; align-self:center; }.video-meta > p:first-child { color:var(--yellow); font:500 10px/1 'DM Mono',monospace; letter-spacing:1.2px; }.video-meta > p span { color:#777; padding:0 7px; }.video-meta h3 { font-family:'Archivo Black',Arial,sans-serif; font-size:clamp(27px,3.4vw,48px); font-weight:400; letter-spacing:-.05em; line-height:.95; margin:13px 0 18px; }.video-description { color:#aaa79f; font-size:14px; line-height:1.65; max-width:340px; }.video-meta a,.text-link { font:500 10px/1 'DM Mono',monospace; letter-spacing:1.2px; display:inline-block; margin-top:16px; }.video-meta a span,.text-link span { color:var(--yellow); font-size:16px; padding-left:8px; }
+    .acoustic { --acoustic-height:clamp(300px,31vw,420px); overflow:hidden; padding-right:0; padding-left:0; background:var(--paper); color:var(--ink); }.acoustic-heading { display:flex; align-items:end; justify-content:space-between; gap:40px; padding:0 clamp(22px,7vw,115px); }.acoustic-heading p { max-width:390px; margin:24px 0 4px; font-size:16px; line-height:1.55; color:#4e4b45; }.acoustic-controls { display:flex; flex:none; gap:10px; }.acoustic-controls button { width:47px; height:47px; cursor:pointer; border:1px solid var(--ink); background:transparent; color:var(--ink); font-size:21px; transition:background .2s,color .2s; }.acoustic-controls button:hover { background:var(--ink); color:var(--yellow); }.acoustic-marquee { width:100%; margin-top:52px; overflow-x:auto; overscroll-behavior-inline:contain; padding:0 clamp(22px,7vw,115px) 15px; scrollbar-width:none; scroll-snap-type:x mandatory; scroll-padding-left:clamp(22px,7vw,115px); -webkit-overflow-scrolling:touch; }.acoustic-marquee::-webkit-scrollbar { display:none; }.acoustic-track { display:flex; width:max-content; }.acoustic-group { display:flex; flex:none; gap:18px; }.acoustic-card { position:relative; flex:none; width:calc(var(--acoustic-height) * 1.7778); height:var(--acoustic-height); padding:0; overflow:hidden; border:0; background:#101010; color:#fff; text-align:left; cursor:pointer; appearance:none; isolation:isolate; scroll-snap-align:start; scroll-snap-stop:always; }.acoustic-card.portrait { width:calc(var(--acoustic-height) * .72); }.acoustic-card img { display:block; width:100%; height:100%; object-fit:cover; transition:transform .45s ease,filter .45s ease; }.acoustic-card.portrait img { object-position:center; }.acoustic-shade { position:absolute; z-index:1; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.03) 35%,rgba(0,0,0,.83) 100%); }.acoustic-play { position:absolute; z-index:2; top:18px; right:18px; display:grid; width:52px; height:52px; place-items:center; border:1px solid rgba(255,255,255,.75); border-radius:50%; background:rgba(0,0,0,.28); backdrop-filter:blur(7px); transition:background .2s,transform .2s; }.acoustic-play i { width:0; height:0; margin-left:4px; border-top:7px solid transparent; border-bottom:7px solid transparent; border-left:11px solid #fff; }.acoustic-card-copy { position:absolute; z-index:2; right:0; bottom:0; left:0; padding:22px; }.acoustic-card-copy strong { display:block; font-family:'Archivo Black',Arial,sans-serif; font-size:clamp(19px,2vw,29px); font-weight:400; line-height:1; letter-spacing:-.04em; text-wrap:balance; }.acoustic-card.portrait .acoustic-card-copy { padding:18px; }.acoustic-card.portrait .acoustic-card-copy strong { font-size:clamp(17px,1.6vw,23px); }.acoustic-card:hover img,.acoustic-card:focus-visible img { transform:scale(1.035); filter:brightness(.83); }.acoustic-card:hover .acoustic-play,.acoustic-card:focus-visible .acoustic-play { background:var(--yellow); transform:scale(1.05); }.acoustic-card:hover .acoustic-play i,.acoustic-card:focus-visible .acoustic-play i { border-left-color:var(--ink); }
+    .acoustic-dialog { width:min(1100px,calc(100vw - 36px)); max-width:none; padding:0; border:1px solid rgba(255,255,255,.25); background:#101010; color:var(--paper); box-shadow:0 30px 100px rgba(0,0,0,.7); }.acoustic-dialog::backdrop { background:rgba(0,0,0,.84); backdrop-filter:blur(8px); }.acoustic-dialog-shell { position:relative; padding:clamp(22px,4vw,52px); }.acoustic-close { position:absolute; z-index:2; top:18px; right:18px; min-height:42px; padding:0 13px; border:1px solid rgba(255,255,255,.4); background:#111; color:#fff; cursor:pointer; font:500 10px/1 'DM Mono',monospace; letter-spacing:1px; }.acoustic-close span { padding-left:7px; color:var(--yellow); font-size:18px; }.acoustic-dialog .eyebrow { padding-right:90px; }.acoustic-dialog h3 { max-width:820px; margin:0 90px 25px 0; font-family:'Archivo Black',Arial,sans-serif; font-size:clamp(25px,4vw,52px); font-weight:400; line-height:.98; letter-spacing:-.05em; }.acoustic-player { width:100%; aspect-ratio:16/9; background:#000; }.acoustic-player iframe { display:block; width:100%; height:100%; border:0; }
+    .acoustic-dialog { max-height:calc(100dvh - 24px); overflow:auto; }
     .gallery { background:var(--yellow); color:var(--ink); padding-right:0; }.gallery .eyebrow { color:#433d00; }.gallery-controls { display:flex; gap:10px; padding-right:clamp(22px,7vw,115px); }.gallery-controls button { height:47px; width:47px; cursor:pointer; border:1px solid #332e00; background:transparent; color:var(--ink); font-size:21px; transition:background .2s; }.gallery-controls button:hover { background:var(--ink); color:var(--yellow); }.gallery-strip { display:flex; align-items:center; gap:18px; overflow-x:auto; overscroll-behavior-inline:contain; padding:69px clamp(22px,7vw,115px) 15px 0; scrollbar-width:none; scroll-snap-type:x mandatory; scroll-padding-left:0; -webkit-overflow-scrolling:touch; }.gallery-strip::-webkit-scrollbar { display:none; }.gallery-item { flex:none; margin:0; scroll-snap-align:start; scroll-snap-stop:always; }.gallery-item.portrait { width:min(34vw,440px); }.gallery-item.landscape { width:min(57vw,760px); }.gallery-media { display:block; position:relative; width:100%; overflow:hidden; background:#151515; box-shadow:0 20px 50px rgba(64,55,0,.18); }.gallery-item.portrait .gallery-media { aspect-ratio:2/3; }.gallery-item.landscape .gallery-media { aspect-ratio:3/2; }.gallery-media img { display:block; width:100%; height:100%; object-fit:cover; transition:transform .45s ease; }.gallery-item:hover .gallery-media img { transform:scale(1.015); }
     .about { background:var(--ink); }.about-grid { display:grid; grid-template-columns:.7fr 1.3fr; gap:clamp(32px,8vw,170px); align-items:start; }.about h2 { position:sticky; top:120px; font-size:clamp(44px,7.5vw,105px); line-height:.84; margin:0; }.about h2 span { color:var(--yellow); }.about-copy { max-width:680px; }.about-copy p { color:#c8c5bc; font-size:clamp(15px,1.25vw,18px); line-height:1.78; margin:0 0 30px; }.about-copy p:first-child { color:var(--paper); font-size:clamp(18px,1.6vw,23px); line-height:1.6; }
     footer { padding:44px clamp(22px,7vw,115px) 25px; border-top:1px solid rgba(255,255,255,.2); }.footer-top,.footer-bottom { display:flex; justify-content:space-between; gap:25px; align-items:center; }.footer-top { padding-bottom:52px; }.footer-right { text-align:right; }.footer-right p { color:#87847d; font:500 9px/1 'DM Mono'; letter-spacing:1px; margin:0; }.footer-bottom { border-top:1px solid rgba(255,255,255,.12); padding-top:22px; color:#87847d; font:500 9px/1 'DM Mono'; letter-spacing:1px; }.footer-bottom p { margin:0; }.footer-bottom div { display:flex; gap:18px; }.footer-bottom a:hover { color:var(--yellow); }.mifer-credit { text-align:right; }.mifer-credit a { color:var(--yellow); }
     @media (max-width:760px) { html { scroll-padding-top:68px; }.site-header { height:68px; padding-left:max(22px,env(safe-area-inset-left)); padding-right:max(14px,env(safe-area-inset-right)); }.menu-toggle { display:block; }.menu-open .menu-toggle i:first-child { transform:translateY(3px) rotate(45deg); }.menu-open .menu-toggle i:last-child { transform:translateY(-3px) rotate(-45deg); } nav { display:none; position:absolute; left:0; right:0; top:68px; padding:25px max(22px,env(safe-area-inset-right)) 25px max(22px,env(safe-area-inset-left)); background:#121212; flex-direction:column; border-bottom:1px solid rgba(255,255,255,.2); box-shadow:0 18px 30px rgba(0,0,0,.3); }nav a { display:flex; align-items:center; min-height:44px; }.menu-open nav { display:flex; }.hero { min-height:calc(100svh - 68px); padding:35px max(22px,env(safe-area-inset-right)) max(70px,env(safe-area-inset-bottom)) max(22px,env(safe-area-inset-left)); }.hero-photo-placeholder { object-position:8% center; }.hero-overlay { background:linear-gradient(0deg,rgba(0,0,0,.9) 0%,rgba(0,0,0,.18) 62%,rgba(0,0,0,.08)); }.hero-copy { top:auto; right:max(22px,env(safe-area-inset-right)); bottom:max(64px,env(safe-area-inset-bottom)); left:max(22px,env(safe-area-inset-left)); text-align:left; }.hero-copy h1 { font-size:clamp(54px,17vw,74px); line-height:.8; white-space:normal; margin-bottom:24px; }.hero-copy h1 span,.hero-copy h1 em { display:block; }.hero-actions { justify-content:flex-start; }.btn { min-height:48px; touch-action:manipulation; }.section { padding-left:max(22px,env(safe-area-inset-left)); }.platform-link { grid-template-columns:42px minmax(0,1fr) auto; gap:7px; min-height:68px; touch-action:manipulation; }.platform-logo { width:31px; height:31px; }.platform-name { min-width:0; font-size:22px; overflow-wrap:anywhere; }.platform-action { font-size:8px; }.split-heading { align-items:start; flex-direction:column; }.video-list { margin-top:45px; }.video-card { grid-template-columns:minmax(0,1fr); gap:20px; padding:25px 0; }.video-frame { width:100%; }.gallery-strip { gap:14px; padding-top:48px; padding-right:max(22px,env(safe-area-inset-right)); }.gallery-item.portrait { width:min(76vw,390px); }.gallery-item.landscape { width:min(88vw,560px); }.gallery-controls button { width:48px; height:48px; touch-action:manipulation; }.about-grid { grid-template-columns:minmax(0,1fr); }.about h2 { position:static; }.footer-top,.footer-bottom { align-items:flex-start; flex-direction:column; }.footer-right { text-align:left; }.footer-bottom div { flex-wrap:wrap; gap:11px 15px; }.mifer-credit { text-align:left; } }
+    @media (max-width:760px) { .acoustic { --acoustic-height:clamp(280px,82vw,340px); padding-left:0; }.acoustic-heading { align-items:flex-start; flex-direction:column; gap:20px; padding-right:max(22px,env(safe-area-inset-right)); padding-left:max(22px,env(safe-area-inset-left)); }.acoustic-heading p { max-width:330px; }.acoustic-marquee { margin-top:42px; }.acoustic-group { gap:12px; padding-right:12px; }.acoustic-play { top:12px; right:12px; width:46px; height:46px; }.acoustic-card-copy,.acoustic-card.portrait .acoustic-card-copy { padding:16px; }.acoustic-dialog { width:calc(100vw - 20px); }.acoustic-dialog-shell { padding:72px 12px 14px; }.acoustic-dialog .eyebrow { padding-right:0; }.acoustic-dialog h3 { margin-right:0; margin-bottom:18px; } }
+    @media (max-width:760px) { .acoustic-controls { align-self:flex-end; }.acoustic-controls button { width:48px; height:48px; touch-action:manipulation; }.acoustic-marquee { padding-right:max(22px,env(safe-area-inset-right)); padding-left:max(22px,env(safe-area-inset-left)); scroll-padding-left:max(22px,env(safe-area-inset-left)); }.acoustic-group { padding-right:0; } }
+    @media (max-width:760px) { .hero { min-height:calc(var(--mobile-viewport-height,100svh) - 68px); } }
     @media (max-width:420px) { .section { padding-top:72px; padding-bottom:72px; }.section-heading h2 { font-size:clamp(40px,14vw,56px); overflow-wrap:anywhere; }.hero-copy h1 { font-size:clamp(50px,17vw,68px); }.hero-actions { gap:9px; }.btn { padding:0 16px; }.platform-action { font-size:0; }.platform-action b { padding-left:0; font-size:18px; }.ticker { height:50px; }.ticker-track { font-size:11px; }.footer-bottom { padding-bottom:max(4px,env(safe-area-inset-bottom)); } }
     @media (max-height:600px) and (min-width:761px) { .hero { min-height:620px; } }
     @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; }.ticker-track { animation:none; } }
+    @media (prefers-reduced-motion:reduce) { .acoustic-track { animation:none; transform:none; } }
   </style>
 </BaseLayout>
